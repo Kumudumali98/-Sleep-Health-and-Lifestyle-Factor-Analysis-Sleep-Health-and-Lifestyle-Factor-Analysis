@@ -1,0 +1,220 @@
+---
+title: "ST 405 Assignment 1"
+author: "S18827"
+date: "2024-04-06"
+output: pdf_document
+---
+```{r}
+# Load necessary libraries
+library(psych)  # for EFA
+library(lavaan) # for CFA
+library(tidyverse)
+library(corrplot)
+library(janitor)
+library(semPlot)
+```
+
+###Pre - processing data
+
+```{r}
+
+life_exp_data <- read_csv("../Data/Sleep_health_and_lifestyle_dataset.csv", 
+                          col_types = 'cfifdiiifciif')
+
+
+life_exp_data <- distinct(life_exp_data)
+
+# Define factor column names
+factor_column_names <- c("Gender", "Sleep Disorder")
+
+# Check factor levels for multiple columns
+lapply(life_exp_data[, c("Gender","BMI Category", "Sleep Disorder")], levels)
+
+
+
+# Convert factor columns to numeric
+life_exp_data[, factor_column_names] <- lapply(life_exp_data[, factor_column_names], as.numeric)
+
+# Separate Blood Pressure into Systolic and Diastolic columns
+life_exp_data <- life_exp_data %>%
+  separate(col = "Blood Pressure", into = c("Systolic_bp", "Diastolic_bp"), sep = "/") %>%
+  mutate(across(c(Systolic_bp, Diastolic_bp), as.integer)) %>%
+  mutate(life_exp_data, 
+         `BMI Category` = recode(`BMI Category`,"Under Weight" = 1,
+                                                "Normal" = 2,
+                                                "Overweight" = 3,
+                                                "Obese" = 4))
+
+life_exp_data <- clean_names(dat = life_exp_data, case = "snake")
+
+# Exclude non-numerical variables and person_id
+boxplot(life_exp_data[, !(names(life_exp_data) %in% c("blood_pressure", "occupation", "person_id"))])
+
+
+# Check the structure of the dataset
+str(life_exp_data)
+```
+
+```{r}
+# Exclude non-numeric columns
+numeric_data <- life_exp_data[, sapply(life_exp_data, is.numeric)]
+
+standardized_data <- scale(numeric_data)
+# Compute KMO
+kmo_result <- KMO(standardized_data)
+print(kmo_result)
+```
+
+```{r}
+standardized_data <- standardized_data[, KMO(standardized_data)$MSAi > 0.5] # Get rid of all variables with MSA < 0.50
+kmo_result <- KMO(standardized_data)
+print(kmo_result)
+```
+
+```{r}
+cortest.bartlett(standardized_data)
+```
+
+```{r}
+
+# Compute the correlation matrix
+correlation_matrix <- cor(standardized_data)
+
+# Create a correlation plot
+corrplot(correlation_matrix, method = "circle", type = "upper", tl.col = "black")
+
+```
+
+```{r}
+cov_mat <- cov(standardized_data)
+round(cov_mat, 2)
+```
+
+###Explonatory Factor Analysis
+
+```{r}
+eigen_Val <- round(eigen(correlation_matrix)$values,4)
+no_factors <- length(eigen_Val)
+Proportion_due_to_factor <- round(eigen_Val/sum(eigen_Val),4)
+
+data.frame(Factor = 1:no_factors,
+           Eigen_value = eigen_Val,
+           Proportion_due_to_factor,
+           Cummulative_Proportion = round(cumsum(Proportion_due_to_factor)*100, digits = 2))
+```
+
+```{r}
+n <- dim(correlation_matrix)[1]
+scree_tb <- tibble(x = 1:n, 
+                   y = sort(eigen(correlation_matrix)$value, decreasing = TRUE))
+
+scree_plot <- scree_tb %>%
+  ggplot(aes(x, y)) +
+  geom_point() +
+  geom_line()  +
+  scale_x_continuous(breaks = 1:n) +
+  ggtitle("Scree plot")
+
+scree_plot +
+  geom_vline(xintercept = 3, color = "red", linetype = "dashed") +
+  annotate("text", 4.1, 2, label = "elbow point", color = "red", hjust = 0)
+```
+
+
+```{r}
+# Perform Exploratory Factor Analysis
+fa_varimax_pca <- fa(standardized_data, nfactors = 3,
+                 rotate = "varimax", 
+                 fm = "pa")
+fa_varimax_pca
+
+# Extract factor loadings
+load <- fa_varimax_pca$loadings
+
+fa.diagram(load, main = "Principal Component Method")
+```
+
+```{r}
+# Perform Exploratory Factor Analysis
+fa_variax_ml <- fa(standardized_data, nfactors = 3,
+                 rotate = "varimax", 
+                 fm = "ml")
+fa_variax_ml
+
+# Extract factor loadings
+load <- fa_variax_ml$loadings
+
+fa.diagram(load)
+
+```
+```{r}
+# Perform Exploratory Factor Analysis
+fa_no_rotation_ml <- fa(standardized_data, nfactors = 3,
+                 rotate = "none", 
+                 fm = "ml")
+fa_no_rotation_ml
+
+# Extract factor loadings
+load <- fa_no_rotation_ml$loadings
+
+```
+
+```{r}
+fa_variax_ml$e.values[1:3]
+```
+```{r}
+sum(fa_variax_ml$communalities)
+sum(fa_variax_ml$communalities)/9
+
+```
+
+###Confirmatory Factor Analysis
+
+```{r}
+#Model Identification
+
+p <- ncol(standardized_data)
+q <- 3 * p  # Assuming each observed variable loads on all 3 factors
+
+# Check if q ≤ p(p + 1)/2 for identification
+identification_status <- q <= p * (p + 1) / 2
+
+# Print identification status
+if (identification_status) {
+  print("CFA model is identified.")
+} else {
+  print("CFA model is not identified. Adjust the model to meet identification criteria.")
+}
+
+#Therefore, model parameters can be estimated.
+```
+
+```{r}
+cfa_model <- '
+factor1 =~ age + quality_of_sleep + stress_level + sleep_duration + heart_rate
+factor2 =~  systolic_bp + diastolic_bp + age
+factor3 =~ bmi_category + sleep_disorder'
+
+Fit <- cfa(cfa_model, data = standardized_data)
+summary(Fit)
+```
+
+```{r}
+summary(Fit, fit.measures = T)
+```
+
+```{r}
+summary(Fit, standardized = T)
+```
+
+```{r}
+#standardize Loadings
+inspect(Fit, what = "std")
+
+inspect(Fit, what = "r2")
+```
+
+```{r}
+
+semPaths(Fit, "std")
+```
