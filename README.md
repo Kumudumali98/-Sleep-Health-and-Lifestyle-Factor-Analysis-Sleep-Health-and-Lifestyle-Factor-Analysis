@@ -2,6 +2,7 @@ Factor Analysis Report for "Sleep Health and Lifestyle" Dataset
 ===============================================================
 
 S/18/827 - J Kumudumali Sandaleka
+
 2024/04/08
 
 Introduction
@@ -113,8 +114,8 @@ After checking basic assumptions, we need to clarify that how many components or
     
 2.  **Scree Plot**
     
-    ![scree_plot]([Images/scree_plot](https://github.com/Kumudumali98/Factor-Analysis-ST-405/assets/121919679/abdf3803-79c2-4ed4-bc98-70a2b9f57384))
-    
+    ![scree_plot](https://github.com/Kumudumali98/Factor-Analysis-ST-405/assets/121919679/1d77f1a4-4a53-4b92-bb9d-3ffa8b0f0015)
+
     The scree plot shows the eigenvalues plotted against the factor number. The first three factors lie on the elbow.
     
 
@@ -136,7 +137,8 @@ According to the results, the rotated factor loadings demonstrate notable correl
 
 ### Varimax - MLE Factor Model
 
-![image](Images/fa_variax_ml)
+![fa_variax_ml](https://github.com/Kumudumali98/Factor-Analysis-ST-405/assets/121919679/89ae5e6e-cf98-4991-ad4f-6c3330231fa0)
+
 
 Based on the factor loadings provided in the table, the following improvements and factor names could be suggested:
 
@@ -154,17 +156,17 @@ Based on the factor loadings provided in the table, the following improvements a
     
 3.  **Total communality value**
     
-    The sum of all communality values is the total communality value = \\(7.261763\\).
+    The sum of all communality values is the total communality value = 7.261763
     
 4.  **The proportion of total variation explained by the three factors**
     
-    \\(\\frac{7.261763}{9} = 0.8068625\\)
+    7.261763 / 9 = 0.8068625
     
-    Therefore, 80.69% proportion of the total variation explained by the three factors.
+    Therefore, 80.69% proportion of the total variation is explained by the three factors.
     
 5.  **Uniqueness**
     
-    The uniqueness of a variable represents the variance that is unique to that variable and not shared with other variables. According to this analysis, the uniqueness of Heart Rate is 0.48, it means that 48% of the variance in Heart Rate is not shared with other variables in the factor model. Conversely, Quality of Sleep and Systolic BP indicate that only 0.4% of their variance is not accounted for by other variables. It is important to note that, variables with lower uniqueness values are more important in explaining the common variance captured by the factors.
+    The uniqueness of a variable represents the variance that is unique to that variable and not shared with other variables. According to this analysis, the uniqueness of Heart Rate is 0.48, which means that 48% of the variance in Heart Rate is not shared with other variables in the factor model. Conversely, Quality of Sleep and Systolic BP indicate that only 0.4% of their variance is not accounted for by other variables. It is important to note that, variables with lower uniqueness values are more important in explaining the common variance captured by the factors.
     
 
 Confirmatory Factor Analysis (CFA)
@@ -210,15 +212,15 @@ Multiple methods of estimation have been developed for SEM models generally and 
     
 2.  **Root Mean Square Error of Approximation (RMSEA):**
     
-    The root mean square error of approximation is a parsimonyadjusted fit index, meaning that it favors simplicity in models. Lower RMSEA values indicate better fit, with values below 0.05 typically considered good. The provided RMSEA of 0.184 suggests a moderate fit.
+    The root mean square error of approximation is a parsimony-adjusted fit index, meaning that it favours simplicity in models. Lower RMSEA values indicate better fit, with values below 0.05 typically considered good. The provided RMSEA of 0.184 suggests a moderate fit.
     
 3.  **Comparative Fit Index (CFI) and Tucker-Lewis Index (TLI):**
     
-    These indices assess the model fit by comparing it to a baseline model. Values closer to 1 indicate better fit. Both CFI and TLI values are closer to 1, suggesting a reasonable fit of the model.
+    These indices assess the model fit by comparing it to a baseline model. Values closer to 1 indicate a better fit. Both CFI and TLI values are closer to 1, suggesting a reasonable fit of the model.
     
 4.  **Standardized Root Mean Square Residual (SRMR):**
     
-    SRMR measures s the square root of the standardized difference between the sample covariances and the covariances predicted by the model. Lower values indicate better fit. The provided SRMR of 0.071 suggests a reasonably good fit.
+    SRMR measures the square root of the standardized difference between the sample covariances and the covariances predicted by the model. Lower values indicate a better fit. The provided SRMR of 0.071 suggests a reasonably good fit.
     
 
 Overall, the model appears to have a reasonable fit to the data, although it may not be perfect. Further adjustments or evaluations might be necessary depending on the specific goals of the analysis.
@@ -250,7 +252,7 @@ Overall, the factor loadings suggest that the model adequately captures the rela
 Conclusion
 ==========
 
-In conclusion, the Explanatory Factor Analysis (EFA) and Confirmatory Factor Analysis (CFA) conducted on the "Sleep Health and Lifestyle" dataset have revealed three distinct factors that explains various facts of sleep health and overall well-being. Factor 1, identified as the Cardiovascular Health Factor, contains variables related to blood pressure and age, highlighting the critical role of cardiovascular health in sleep quality. Factor 2, named the Sleep Wellness Factor, includes variables associated with sleep duration, quality, and stress levels, highlighting relationship between sleep patterns and psychological well-being. Finally, Factor 3, the Body-Mind Balance Factor, reflects variables related to body composition and sleep disorders, emphasizing the inter connection of physical and mental health with sleep quality.
+In conclusion, the Explanatory Factor Analysis (EFA) and Confirmatory Factor Analysis (CFA) conducted on the "Sleep Health and Lifestyle" dataset have revealed three distinct factors that explain various facts about sleep health and overall well-being. Factor 1, identified as the Cardiovascular Health Factor, contains variables related to blood pressure and age, highlighting the critical role of cardiovascular health in sleep quality. Factor 2, named the Sleep Wellness Factor, includes variables associated with sleep duration, quality, and stress levels, highlighting the relationship between sleep patterns and psychological well-being. Finally, Factor 3, the Body-Mind Balance Factor, reflects variables related to body composition and sleep disorders, emphasizing the interconnection of physical and mental health with sleep quality.
 
 These factors offer valuable insights for healthcare professionals, researchers, and policymakers looking to create specific measures to improve sleep quality and promote overall well-being. Understanding the different dimensions of sleep health and lifestyle factors allows for the development of customized solutions to address the specific needs and challenges that individuals in various populations face. Furthermore, the discovery of these factors emphasizes the importance of taking a variety of perspectives when it comes to sleep health management.
 
